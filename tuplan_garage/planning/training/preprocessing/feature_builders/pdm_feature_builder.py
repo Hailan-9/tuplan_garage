@@ -59,6 +59,7 @@ from tuplan_garage.planning.training.preprocessing.features.pdm_feature import (
     PDMFeature,
 )
 
+# NOTE 数据预处理！！！
 
 class PDMFeatureBuilder(AbstractFeatureBuilder):
     """Feature builder class for PDMOpen and PDMOffset."""

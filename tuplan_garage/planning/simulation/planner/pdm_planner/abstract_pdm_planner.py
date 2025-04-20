@@ -28,7 +28,7 @@ from tuplan_garage.planning.simulation.planner.pdm_planner.utils.route_utils imp
     route_roadblock_correction,
 )
 
-
+# 抽象规划器类
 class AbstractPDMPlanner(AbstractPlanner, ABC):
     """
     Interface for planners incorporating PDM-* variants.

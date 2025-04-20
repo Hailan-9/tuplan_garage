@@ -38,7 +38,7 @@ from tuplan_garage.planning.simulation.planner.pdm_planner.utils.pdm_geometry_ut
 )
 from tuplan_garage.planning.simulation.planner.pdm_planner.utils.pdm_path import PDMPath
 
-
+# NOTE PDM-Closed-Planner类
 class AbstractPDMClosedPlanner(AbstractPDMPlanner):
     """
     Interface for planners incorporating PDM-Closed. Used for PDM-Closed and PDM-Hybrid.
@@ -80,7 +80,9 @@ class AbstractPDMClosedPlanner(AbstractPDMPlanner):
 
         # proposal/trajectory related classes
         self._generator = PDMGenerator(trajectory_sampling, proposal_sampling)
+        # NOTE PDM模拟-轨迹类，即仿真轨迹
         self._simulator = PDMSimulator(proposal_sampling)
+        # PDM打分器
         self._scorer = PDMScorer(proposal_sampling)
         self._emergency_brake = PDMEmergencyBrake(trajectory_sampling)
 
@@ -108,7 +110,7 @@ class AbstractPDMClosedPlanner(AbstractPDMPlanner):
 
         # update proposals
         self._proposal_manager.update(current_lane.speed_limit_mps)
-
+    # NOTE 得到提案路径
     def _get_proposal_paths(
         self, current_lane: LaneGraphEdgeMapObject
     ) -> List[PDMPath]:
@@ -132,7 +134,7 @@ class AbstractPDMClosedPlanner(AbstractPDMPlanner):
                 output_paths.append(PDMPath(offset_discrete_path))
 
         return output_paths
-
+    # NOTE PDM-Closed planner！！！得到闭环轨迹！！！
     def _get_closed_loop_trajectory(
         self,
         current_input: PlannerInput,
@@ -166,7 +168,7 @@ class AbstractPDMClosedPlanner(AbstractPDMPlanner):
             proposals_array, ego_state
         )
 
-        # 5. Score proposals
+        # NOTE 5. Score proposals
         proposal_scores = self._scorer.score_proposals(
             simulated_proposals_array,
             ego_state,

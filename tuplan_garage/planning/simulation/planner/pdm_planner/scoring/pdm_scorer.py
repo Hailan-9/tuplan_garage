@@ -55,7 +55,7 @@ DRIVING_DIRECTION_VIOLATION_THRESHOLD = 6.0  # [m] (driving direction)
 STOPPED_SPEED_THRESHOLD = 5e-03  # [m/s] (ttc)
 PROGRESS_DISTANCE_THRESHOLD = 0.1  # [m] (progress)
 
-
+# NOTE PDM-Closed 轨迹提案的评分器！！！
 class PDMScorer:
     """Class to score proposals in PDM pipeline. Re-implements nuPlan's closed-loop metrics."""
 
@@ -75,6 +75,10 @@ class PDMScorer:
         self._map_api: Optional[AbstractMap] = None
 
         self._num_proposals: Optional[int] = None
+        # Optional 是一个类型注解，表示变量的值可以是其指定的类型，也可以是 None
+        # npt.NDArray 是 numpy.typing.NDArray 的别名，用于类型注解，表示一个多维数组。
+        # np.float64 是 NumPy 的数据类型，表示 64 位浮点数。
+        # = None 这是变量的初始值，表示 _states 在初始化时被赋值为 None
         self._states: Optional[npt.NDArray[np.float64]] = None
         self._ego_coords: Optional[npt.NDArray[np.float64]] = None
         self._ego_polygons: Optional[npt.NDArray[np.object_]] = None
@@ -108,7 +112,7 @@ class PDMScorer:
         return (
             self._ttc_time_idcs[proposal_idx] * self._proposal_sampling.interval_length
         )
-
+    # NOTE 对轨迹提案进行评分，类似与nuPlan中的闭环指标
     def score_proposals(
         self,
         states: npt.NDArray[np.float64],
@@ -162,7 +166,10 @@ class PDMScorer:
         Aggregates metrics with multiplicative and weighted average.
         :return: array containing score of each proposal
         """
-
+        # axis=0 表示沿着行的方向进行操作，即对每一列的元素进行计算。
+        # 在二维数组中，axis=0 意味着沿着垂直方向（从上到下）计算每一列的乘积
+        # 如果 self._multi_metrics 是一个形状为 (m, n) 的二维数组，那么 self._multi_metrics.prod(axis=0) 的返回值将是一个长度为 n 的一维数组。
+        # 每个元素是对应列中所有行的乘积。
         # accumulate multiplicative metrics
         multiplicate_metric_scores = self._multi_metrics.prod(axis=0)
 
@@ -386,7 +393,7 @@ class PDMScorer:
                     proposal_collided_track_ids[proposal_idx].append(token)
 
         self._multi_metrics[MultiMetricIndex.NO_COLLISION] = no_collision_scores
-
+    # NOTE 计算轨迹的TTC
     def _calculate_ttc(self):
         """
         Re-implementation of nuPlan's time-to-collision metric.
@@ -489,7 +496,7 @@ class PDMScorer:
                         temp_collided_track_ids[proposal_idx].append(token)
 
         self._weighted_metrics[WeightedMetricIndex.TTC] = ttc_scores
-
+    # 计算进展
     def _calculate_progress(self) -> None:
         """
         Re-implementation of nuPlan's progress metric (non-normalized).
@@ -503,6 +510,7 @@ class PDMScorer:
                 *self._ego_coords[proposal_idx, 0, BBCoordsIndex.CENTER]
             )
             end_point = Point(*self._ego_coords[proposal_idx, -1, BBCoordsIndex.CENTER])
+            # 两个点的投影距离
             progress = self._centerline.project([start_point, end_point])
             progress_in_meter[proposal_idx] = progress[1] - progress[0]
 

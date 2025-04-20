@@ -62,7 +62,7 @@ class PDMOpenPlanner(AbstractPDMPlanner):
         super(PDMOpenPlanner, self).__init__(map_radius)
 
         self._device = "cpu"
-
+        # NOTE 加载 pdm-open-planner模型pth文件
         self._model = LightningModuleWrapper.load_from_checkpoint(
             checkpoint_path,
             model=model,

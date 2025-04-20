@@ -86,7 +86,7 @@ class PDMClosedPlanner(AbstractPDMClosedPlanner):
         if self._iteration == 0:
             self._route_roadblock_correction(ego_state)
 
-        # Update/Create drivable area polygon map
+        # NOTE Update/Create drivable area polygon map
         self._drivable_area_map = get_drivable_area_map(
             self._map_api, ego_state, self._map_radius
         )

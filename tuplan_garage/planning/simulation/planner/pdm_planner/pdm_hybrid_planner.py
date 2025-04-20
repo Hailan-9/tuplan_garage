@@ -46,7 +46,7 @@ warnings.filterwarnings("ignore", category=RuntimeWarning)
 
 logger = logging.getLogger(__name__)
 
-
+# NOTE PDM混合规划器，短期规划（前两秒）是pdm-closed,长期规划（后面六秒）是pdm-open！！！
 class PDMHybridPlanner(AbstractPDMClosedPlanner):
     """PDM-Closed planner class."""
 
